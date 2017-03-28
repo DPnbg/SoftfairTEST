@@ -51,9 +51,20 @@ namespace SoftfairTEST.Controllers {
 				try {
 					var Req = System.Net.WebRequest.Create("http://localhost/BT4All/SV/d.svc/m?i=getStartID_SLS_NoSign");
 					Req.Method = "POST";
-					Req.ContentLength = BT4allFile.Length;
-					Req.GetRequestStream().Write(BT4allFile, 0, BT4allFile.Length);
-					var resp = Req.GetResponse();
+
+                    var xtraData = new byte[100];
+                    for (int x = 0; x < xtraData.Length; x++)
+                        xtraData[x] = 1;
+
+					Req.ContentLength = BT4allFile.Length+xtraData.Length;
+                    if (xtraData.Length > 0)
+                    {
+                        Req.Headers.Add("xtraDataLen", xtraData.Length.ToString());
+                    }
+                    var reqS = Req.GetRequestStream();
+                    reqS.Write(BT4allFile, 0, BT4allFile.Length);
+                    reqS.Write(xtraData, 0, xtraData.Length);
+                    var resp = Req.GetResponse();
 					Newtonsoft.Json.JsonTextReader jReader = new Newtonsoft.Json.JsonTextReader(
 						new System.IO.StreamReader(resp.GetResponseStream()));
 					while (jReader.Read()) {
