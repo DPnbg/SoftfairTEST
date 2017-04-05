@@ -22,3 +22,8 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.flcontainer {
+    display: flex; 
+    padding-right:10px;
+}
