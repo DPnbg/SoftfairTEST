@@ -8,13 +8,26 @@
 </div>
 
 @{
-    var StartURL = "http://localhost/BT4All/SV/s.svc/r?r=pad.html&f=bt4all_startID" + ViewBag.StartID;
-    var CallbackURL = "http://localhost/BT4All/SV/s.svc/g/bt4all_startID/" + ViewBag.StartID;
+	if (!string.IsNullOrWhiteSpace(ViewBag.err)) {
+		<div class="row">
+			<div class="col-xs-12 alert alert-danger">
+				<span class="">@ViewBag.err</span>
+				@if (!string.IsNullOrWhiteSpace(ViewBag.rawHtml)) {
+					<div>
+						@Html.Raw(@ViewBag.rawHtml)
+					</div>
+				}
+			</div>
+		</div>
+	} else if (!string.IsNullOrWhiteSpace(ViewBag.StartID)) {
+		var StartURL = "https://test.nuernberger-bt4all.de/BT4All/SV/s.svc/r?r=pad.html&f=bt4all_startID" + ViewBag.StartID;
+		var CallbackURL = "https://test.nuernberger-bt4all.de/BT4All/SV/s.svc/g/bt4all_startID/" + ViewBag.StartID;
     <div style="position:absolute;top:0;right:0;bottom:0;left:0;background-color: rgba(150, 150, 150, 0.5)">
         <div style="position:relative;top:10%;left:10%;background-color:white;opacity:1;width:80%;height:80%">
             <iframe src=@StartURL style="opacity:1" width="100%" height="90%"></iframe>
             <a class="btn btn-success" href="@CallbackURL">Schließen</a>
         </div>
     </div>
+	}
 }
 
